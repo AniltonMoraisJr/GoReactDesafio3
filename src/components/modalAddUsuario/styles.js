@@ -16,7 +16,7 @@ export const Modal = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 150px;
-  width: 30%;
+  width: 25%;
   padding: 10px;
   background: #fff;
   align-items: center;
@@ -26,6 +26,7 @@ export const Modal = styled.div`
     font-weight: bolder;
   }
   form {
+    flex: 1;
     display: flex;
     flex-direction: column;
     padding: 10px 0;
@@ -48,6 +49,7 @@ export const Modal = styled.div`
         color: #fff;
         height: 50px;
         width: 100px;
+        text-decoration: none;
         cursor: pointer;
         &.btn-cancel {
           background: #4b515d;

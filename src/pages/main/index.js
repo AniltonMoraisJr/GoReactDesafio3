@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import MapGL, { Marker } from 'react-map-gl';
+
+import ReactMapGL, { Marker } from 'react-map-gl';
 import { Creators as UsuariosActions } from '../../store/ducks/usuarios';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -45,17 +47,16 @@ class Main extends Component {
 
   handleMapClick = (e) => {
     const [latitude, longitude] = e.lngLat;
-    this.setState({ latitude, longitude });
-    console.log(latitude);
+    this.setState({ latitude: latitude, longitude: longitude });
     this.setState({ showModal: true });
   };
 
   dismissModal = () => {
     this.setState({ showModal: false });
+    this.setState({ latitude: null, longitude: null })
   };
 
   addNewUser = (usuario) => {
-    console.log(usuario);
     this.props.addUser(usuario, this.state.latitude, this.state.longitude);
     this.dismissModal();
   };
@@ -66,36 +67,49 @@ class Main extends Component {
         {this.state.showModal && (
           <ModalAddUsuario onSubmit={this.addNewUser} dismissModal={this.dismissModal} />
         )}
-
-        <MapGL
+        <UsuariosList />
+        <ReactMapGL
           {...this.state.viewport}
           onClick={this.handleMapClick}
           mapStyle="mapbox://styles/mapbox/basic-v9"
           mapboxApiAccessToken="pk.eyJ1IjoiYW5pbHRvbm1vcmFpc2pyIiwiYSI6ImNqcGhsMjI3ZTB4cGIzdm1sa2gwNDhoNzAifQ.JxP54LkG2zfsvjg1Sgl60g"
           onViewportChange={viewport => this.setState({ viewport })}
         >
-          <UsuariosList />
+
           {this.props.usuarios.data.map(usuario => (
-            <Marker
-              key={usuario.id}
-              latitude={usuario.latitude}
-              longitude={usuario.longitude}
-              captureClick
-            >
-              <img
-                style={{
-                  borderRadius: 100,
-                  width: 48,
-                  height: 48,
-                }}
-                src={usuario.avatar_url}
-              />
-            </Marker>
+             <Marker
+             key={usuario.id}
+             latitude={usuario.latitude}
+             longitude={usuario.longitude}
+             onClick={this.handleMapClick}
+             captureClick={true}
+           >
+             <img
+               style={{
+                 borderRadius: 100,
+                 width: 48,
+                 height: 48
+               }}
+               src={usuario.avatar_url}
+               alt={usuario.name}
+             />
+           </Marker>
+
           ))}
-        </MapGL>
+        </ReactMapGL>
       </Fragment>
     );
   }
+}
+
+Main.propTypes = {
+  usuarios: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+    avatar_url: PropTypes.string
+  })).isRequired,
+  addUser: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({

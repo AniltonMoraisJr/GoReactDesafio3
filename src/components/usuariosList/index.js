@@ -1,12 +1,20 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, List } from './styles';
-
+import { toast } from 'react-toastify';
 import UsuarioListItem from '../usuariosListItem';
+import { bindActionCreators } from 'redux';
+import {Creators as UsuariosActions} from '../../store/ducks/usuarios';
 
 class UsuariosList extends Component {
   state = {};
 
+  removeUser = id => {
+    this.props.removeUser(id);
+    toast.success("Usuário removido !", {
+      position: toast.POSITION.TOP_RIGHT
+    });
+  }
   render() {
     return (
       <Container>
@@ -16,7 +24,7 @@ class UsuariosList extends Component {
         <List>
           <ul>
             {this.props.usuarios.data.length > 0 ? (
-              this.props.usuarios.data.map(usuario => <UsuarioListItem key={usuario.id} />)
+              this.props.usuarios.data.map(usuario => <UsuarioListItem key={usuario.id} data={usuario} onDelete={this.removeUser}/>)
             ) : (
               <h4> Nenhum usuário adicionado </h4>
             )}
@@ -31,4 +39,8 @@ const mapStateToProps = state => ({
   usuarios: state.usuarios,
 });
 
-export default connect(mapStateToProps)(UsuariosList);
+const mapDispatchToProps = dispatch => bindActionCreators(UsuariosActions, dispatch);
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(UsuariosList);

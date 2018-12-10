@@ -1,31 +1,44 @@
 import styled from 'styled-components';
 
 export const Usuario = styled.li`
+
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 30px;
-  cursor: pointer;
+  z-index: 99999999;
 
-  &:hover {
-    background: #445;
+  &:not(:last-child){
+    border-bottom: 1px solid #eee;
   }
+
   img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    border-radius: 100px;
+    border: 4px solid #cdcbcb;
+
+    padding: 2px;
   }
 
   strong {
     color: #666;
   }
 
-  i {
-    font-size: 28px;
+  button{
+    border: 0;
+    background: transparent;
+    width: 40px;
+    height: 40px;
+    cursor:pointer;
+    i {
+      font-size: 28px;
 
-    &.close {
-      color: #f00;
+      &.close {
+        color: #f00;
+      }
     }
   }
+
 `;

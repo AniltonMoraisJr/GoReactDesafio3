@@ -26,6 +26,7 @@ export const List = styled.div`
   ul {
     flex: 1;
     list-style: none;
+    text-align: center;
 
     & > * {
       flex: 1 100%;

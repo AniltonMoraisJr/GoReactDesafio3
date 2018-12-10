@@ -2,10 +2,7 @@
 export const Types = {
   ADD_USER: 'usuarios/ADD_USER',
   ADD_USER_SUCCESS: 'usuarios/ADD_USER_SUCCESS',
-  ADD_USER_FAILURE: 'usuarios/ADD_USER_FAILURE',
   REMOVE_USER: 'usuarios/REMOVE_USER',
-  REMOVE_USER_SUCCESS: 'usuarios/REMOVE_USER_SUCCESS',
-  REMOVE_USER_FAILURE: 'usuarios/REMOVE_USER_FAILURE',
 };
 
 const INITIAL_STATE = {
@@ -16,16 +13,21 @@ const INITIAL_STATE = {
 /* Reducer */
 export default function usuarios(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case 'ADD_USER':
+    case Types.ADD_USER:
       return { ...state, isLoading: true };
-    case 'ADD_USER_SUCCESS':
-      console.log(action.payload.data);
+    case Types.ADD_USER_SUCCESS:
       return {
         ...state,
         isLoading: false,
         error: null,
         data: [...state.data, action.payload.data],
       };
+    case Types.REMOVE_USER:
+      return{
+      ...state,
+      isLoading:false,
+      data: [...state.data.filter(usuario => usuario.id !== action.payload.id)]
+    };
     default:
       return state;
   }
@@ -44,5 +46,9 @@ export const Creators = {
   addUserSuccess: data => ({
     type: Types.ADD_USER_SUCCESS,
     payload: { data },
+  }),
+  removeUser: id => ({
+    type: Types.REMOVE_USER,
+    payload: {id},
   }),
 };
